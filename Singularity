@@ -1,49 +1,54 @@
-Bootstrap: localimage
-From: nvidia/8.0-cudnn7-devel
+Bootstrap: docker
+From: nvidia/cuda:8.0-cudnn7-devel
 
-%runscript
-    cd /home/nina/gnetree/pyca
-    git checkout 9954dd5319efaa0ac5f58977e57acf004ad73ed7
-    mkdir Build && cd Build
-    ccmake swig..
+%setup
+     cp -R /home/nina/gnetree $SINGULARITY_ROOTFS/gnetree
 
 %environment
-    SREGISTRY_NVIDIA_USERNAME='$oauthtoken'
-    export SREGISTRY_NVIDIA_USERNAME
-    SREGISTRY_NVIDIA_TOKEN=ZDFkMTdiZ2dsM3U0bmIzMG5jYjBobWQ2Yjk6N2QwOGFlNTYtZDhhYy00Y2VjLThhMWItNGIwNGYyNmU4ZWEz
-    export SREGISTRY_NVIDIA_TOKEN
-    SREGISTRY_NVIDIA_BASE=nvcr.io
-    export SREGISTRY_NVIDIA_BASE
-    SWIG_DIR=/usr
-    export SWIG_DIR
-    SWIG_PATH=/usr/bin
-    export SWIG_PATH
-    SWIG_EXECUTABLE=/usr/bin/swig
-    export SWIG_EXECUTABLE
-    PATH=$PATH:$SWIG_PATH:/user/local/cuda/bin
-    export PATH
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
     export LD_LIBRARY_PATH
     CUDA_HOME=/usr/local/cuda
     export CUDA_HOME
-    PYTHONPATH=/home/nina/gnetree/quicksilver/code/library
+    PYTHONPATH=/root/quicksilver/code/library:/root/quicksilver/3rd_party_software/pyca/build/python_module
     export PYTHONPATH
     LC_ALL=C
     export LC_ALL
 
 %post
-    apt-get update
-    apt-get -y install git
-    apt-get -y install cmake-curses-gui \
+    apt update
+    apt -y install git
+    apt -y install build-essential \
+                       cmake-curses-gui \
                        libboost-all-dev \
                        libfftw3-dev \
                        libghc-regex-pcre-dev \
                        libpcre3 \
                        libpcre3-dev \
                        openssh-server \
-                       python2.7 \
                        python-matplotlib \
                        python-pip \
+                       python2.7 \
                        swig
+
+    # Pytorch
     pip install https://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl
-    pip install h5py scikit-image==0.14.0 matplotlib==2.2.3
+    pip install h5py numpy==1.15.0 scikit-image==0.14.0 matplotlib==2.2.3
+
+    # Install ITK
+    cd $HOME
+    wget https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz/download
+    tar -zxvf download
+    cd InsightToolkit-4.13.1
+    mkdir build && cd build
+    cmake ..
+    make -j10
+    make install
+
+    # Install pyca
+    cd $HOME
+    test ! -d quicksilver && git clone https://github.com/johmathe/quicksilver.git
+    cd quicksilver/3rd_party_software/pyca/
+    mkdir build && cd build
+    cmake .. -DCMAKE_LIBRARY_PATH=/usr/local/cuda/lib64/stubs
+    make -j10
+    apt -y install vim
