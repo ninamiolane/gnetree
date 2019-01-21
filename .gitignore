@@ -1,3 +1,6 @@
+*.swp
+CMakeFiles*
+CMakeCache*
 anaconda2/
 CUMC_examples/
 pyca/
