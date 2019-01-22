@@ -6,9 +6,9 @@ From: ../simgs/base.simg
     export LD_LIBRARY_PATH
     CUDA_HOME=/usr/local/cuda
     export CUDA_HOME
-    QS_HOME=/scratch/quicksilver
+    QS_HOME=/code/quicksilver
     export QS_HOME
-    PYTHONPATH=/scratch:$QS_HOME/code/library:$QS_HOME/3rd_party_software/pyca/build/python_module
+    PYTHONPATH=/code:$QS_HOME/code/library:$QS_HOME/3rd_party_software/pyca/build/python_module
     PYTHONPATH=$PYTHONPATH:$QS_HOME/code/applications:$QS_HOME/code/vectormomentum/Code/Python
     export PYTHONPATH
     LC_ALL=C
@@ -17,7 +17,7 @@ From: ../simgs/base.simg
 %post
     pip install luigi \
                 pandas
-    cd /scratch/quicksilver
+    cd /code/quicksilver
     git pull origin master
 
 %runscript

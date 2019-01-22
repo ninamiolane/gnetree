@@ -6,7 +6,7 @@ From: nvidia/cuda:8.0-cudnn7-devel
     export LD_LIBRARY_PATH
     CUDA_HOME=/usr/local/cuda
     export CUDA_HOME
-    PYTHONPATH=/scratch/quicksilver/code/library:/scratch/quicksilver/3rd_party_software/pyca/build/python_module
+    PYTHONPATH=/code/quicksilver/code/library:/code/quicksilver/3rd_party_software/pyca/build/python_module
     export PYTHONPATH
     LC_ALL=C
     export LC_ALL
@@ -33,7 +33,7 @@ From: nvidia/cuda:8.0-cudnn7-devel
     pip install h5py numpy==1.15.0 scikit-image==0.14.0 matplotlib==2.2.3
 
     # Install ITK
-    mkdir -p /scratch && chmod 777 /scratch && cd /scratch
+    mkdir -p /code && chmod 777 /code && cd /code
     wget https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz/download
     tar -zxvf download
     cd InsightToolkit-4.13.1
@@ -43,7 +43,7 @@ From: nvidia/cuda:8.0-cudnn7-devel
     make install
 
     # Install pyca
-    cd /scratch
+    cd /code
     test ! -d quicksilver && git clone https://github.com/ninamiolane/quicksilver.git
     cd quicksilver/3rd_party_software/pyca/
     mkdir build && cd build
