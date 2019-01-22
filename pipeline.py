@@ -5,6 +5,8 @@ import logging
 import luigi
 import pandas as pd
 
+import quicksilver.code.applications.qs_predict as pred
+
 
 class FetchDataSet(luigi.Task):
     path = '/dataset/'
@@ -21,8 +23,12 @@ class FetchDataSet(luigi.Task):
 
 class ComputeDistances(luigi.Task):
     def compute_distances(permutations):
-        # TODO(johmathe): call quicksilver.
-        pass
+        args = pred.args
+        moving_images = ['../CUMC_examples/m1.nii']
+        target_images = ['../CUMC_examples/21.nii']
+        output_prefixes = ['/tmp/']
+        test = pred.predict_image(
+            args, moving_images, target_images, output_prefixes)
 
     def requires(self):
         return {'dataset': FetchDataSet()}
