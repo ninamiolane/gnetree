@@ -12,7 +12,7 @@ singularity_file=Singularity
 img_name="${img_type}.simg"
 if [ ! -f ../$SIMGS_DIR/$img_name ]; then
     echo "Building image $img_name from singularity file $singularity_file"
-    sudo singularity build ../$SIMGS_DIR/$img_name $singularity_file
+    sudo -H singularity build ../$SIMGS_DIR/$img_name $singularity_file
 fi
 
 # Build pipeline image
@@ -22,9 +22,9 @@ singularity_file=Singularity
 img_name="${img_type}.simg"
 if [ ! -f ../$SIMGS_DIR/$img_name ]; then
     echo "Building image $img_name from singularity file $singularity_file"
-    sudo singularity build ../$SIMGS_DIR/$img_name $singularity_file
+    sudo -H singularity build ../$SIMGS_DIR/$img_name $singularity_file
 fi
 
 # Run pipeline
 cd ..
-singularity run $SIMGS_DIR/$img_name
+singularity run --nv $SIMGS_DIR/$img_name

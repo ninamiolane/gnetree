@@ -8,8 +8,8 @@ From: ../simgs/base.simg
     export CUDA_HOME
     QS_HOME=/scratch/quicksilver
     export QS_HOME
-    PYTHONPATH=$QS_HOME/code/library:$QS_HOME/3rd_party_software/pyca/build/python_module
-    PYTHONPATH=$PYTHONPATH:$QS_HOME/code/vectormomentum/Code/Python
+    PYTHONPATH=/scratch:$QS_HOME/code/library:$QS_HOME/3rd_party_software/pyca/build/python_module
+    PYTHONPATH=$PYTHONPATH:$QS_HOME/code/applications:$QS_HOME/code/vectormomentum/Code/Python
     export PYTHONPATH
     LC_ALL=C
     export LC_ALL
@@ -17,6 +17,8 @@ From: ../simgs/base.simg
 %post
     pip install luigi \
                 pandas
+    cd /scratch/quicksilver
+    git pull origin master
 
 %runscript
     exec /usr/bin/python -u pipeline.py --n-GPU=8
