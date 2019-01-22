@@ -3,11 +3,16 @@
 import itertools
 import logging
 import luigi
+import os
 import pandas as pd
+
+import qs_predict
+
+HOME_DIR = '/scratch/users/nmiolane'
 
 
 class FetchDataSet(luigi.Task):
-    path = '/dataset/'
+    path = os.path.join(HOME_DIR, 'dataset')
 
     def requires(self):
         pass
@@ -20,9 +25,15 @@ class FetchDataSet(luigi.Task):
 
 
 class ComputeDistances(luigi.Task):
+    path = os.path.join(HOME_DIR, 'output')
+
     def compute_distances(permutations):
-        # TODO(johmathe): call quicksilver.
-        pass
+        args = qs_predict.args
+        moving_images = ['../CUMC_examples/m1.nii']
+        target_images = ['../CUMC_examples/21.nii']
+        output_prefixes = ['/tmp/']
+        test = qs_predict.predict_image(
+            args, moving_images, target_images, output_prefixes)
 
     def requires(self):
         return {'dataset': FetchDataSet()}
